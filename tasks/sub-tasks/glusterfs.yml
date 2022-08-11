@@ -1,0 +1,86 @@
+---
+- block:
+    # - name: "{{ brick.name }} create gluster brick directories"
+    #   file:
+    #     path: "{{ item }}"
+    #     state: directory
+    #     mode: 0775
+    #   with_items:
+    #     - "{{ brick.path }}"
+
+    - name: "{{ brick.name }} ensure enough hosts for the cluster"
+      assert:
+        that:
+          - brick.replicas == brick.nodes | length
+        fail_msg: >-
+          a minimum of {{ brick.replicas }}
+          servers is required to configure a new cluster
+        quiet: yes
+
+    - name: "{{ brick.name }} create and configure distributed gluster volume"
+      gluster_volume:
+        state: present
+        name: "{{ brick.name }}"
+        host: "{{ gluster_node_peer_address }}"
+        brick: "{{ brick.path }}"
+        cluster: "{{ brick.nodes }}"
+        disperses: "{{ brick.disperses | default(omit) }}"
+        redundancies: "{{ brick.redundancies | default(omit) }}"
+        replicas: "{{ brick.replicas | default(omit) }}"
+        rebalance: "{{ brick.rebalance | default(omit) }}"
+        force: yes
+        start_on_create: yes
+        options: "{{ brick.options | default(omit) }}"
+      run_once: true
+
+    # - name: "{{ brick.name }} create local mount point"
+    #   file:
+    #     path: "{{ brick.mount_local_path }}"
+    #     state: directory
+    #     mode: 0775
+    #   when: brick.mount_localy | bool
+    
+    - name: "{{ brick.name }} mount gluster volume localy"
+      mount:
+        name: "{{ brick.mount_local_path }}"
+        # src: "{{ internal_ip }}:/{{ brick.name }}"
+        src: "localhost:/{{ brick.name }}"
+        fstype: glusterfs
+        opts: _netdev,x-systemd.automount,x-systemd.mount-timeout=10s,x-systemd.idle-timeout=10m
+        state: mounted
+      when: brick.mount_localy | bool
+    
+    - name: "{{ brick.name }} umount gluster volume localy"
+      mount:
+        name: "{{ brick.mount_local_path }}"
+        state: absent
+      when: not brick.mount_localy | bool
+    
+    # - name: "{{ brick.name }} delete local mount point"
+    #   file:
+    #     path: "{{ brick.mount_local_path }}"
+    #     state: absent
+    #   when: not brick.mount_localy | bool
+  when: brick.state == "present"
+
+
+- block:
+    - name: "{{ brick.name }} umount gluster volume localy"
+      mount:
+        name: "{{ brick.mount_local_path }}"
+        state: absent
+    
+    # - name: "{{ brick.name }} delete local mount point"
+    #   file:
+    #     path: "{{ brick.mount_local_path }}"
+    #     state: absent
+
+    - name: "{{ brick.name }} remove distributed gluster volume"
+      gluster_volume:
+        state: absent
+        name: "{{ brick.name }}"
+        brick: "{{ brick.path }}"
+        cluster: "{{ brick.nodes }}"
+        force: yes
+      run_once: true
+  when: brick.state == "absent"

@@ -1,0 +1,10 @@
+---
+- name: start gluster
+  service:
+    name: "{{ glusterfs_daemon }}"
+    state: started
+
+- name: restart gluster
+  service:
+    name: "{{ glusterfs_daemon }}"
+    state: restarted
