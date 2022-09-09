@@ -44,7 +44,6 @@
 #     state: present
 #     default_release: "{{ glusterfs_default_release }}"
 
-
 - name: install dependencies
   apt:
     name:
@@ -68,16 +67,14 @@
       - glusterfs-server
     state: present
 
-
 - name: start and enable glusterfs
-  service: 
+  service:
     name: "{{ glusterfs_daemon }}"
     state: started
-    enabled: yes
-
+    enabled: true
 
 - name: configure brick
-  include_tasks: 
+  include_tasks:
     file: tasks/sub-tasks/glusterfs.yml
   with_items: "{{ gluster_bricks_list }}"
   loop_control:

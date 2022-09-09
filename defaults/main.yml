@@ -7,14 +7,11 @@
 # glusterfs_gpg_key_version: "7"
 # glusterfs_deb_version: "LATEST"
 
-
 gluster_version: 9
 glusterfs_daemon: glusterd
 
-
 # internal_ip:
 # gluster_use_internal_ip: false
-
 
 gluster_bricks_list:
   - name: gfs_lv_swarm_prod
@@ -42,7 +39,7 @@ gluster_bricks_list:
       cluster.optimistic-change-log: "off",
       cluster.self-heal-daemon: "on",
       cluster.shd-max-threads: "1",
-      cluster.shd-wait-qlength: "128", 
+      cluster.shd-wait-qlength: "128",
       # cluster.heal-timeout: "600",
       cluster.metadata-self-heal: "off",
       diagnostics.brick-log-level: "WARNING",
@@ -71,7 +68,7 @@ gluster_bricks_list:
       network.compression.min-size: "0",
       network.compression.debug: "false",
       network.compression.compression-level: "-1",
-      network.compression.window-size: "-15", 
+      network.compression.window-size: "-15",
       network.inode-lru-limit: "30000",
       nfs.disable: "on",
       nl-cache-positive-entry: "on",
@@ -94,5 +91,5 @@ gluster_bricks_list:
       performance.readdir-ahead: "on",
       server.allow-insecure: "on",
       server.event-threads: "8",
-      server.ssl: "off"
+      server.ssl: "off",
     }
