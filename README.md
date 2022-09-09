@@ -13,9 +13,9 @@ This role is built to only run on platforms defined in `meta/main.yml`
 Role Variables
 --------------
 
-Necessary variables are defined on `defaults/main.yml`
+Necessary variables are defined on `defaults/main.yml`.
 
-Use "gluster_node_peer_address" on each node as host_vars
+The variable `gluster_node_peer_address` need to be defined on each host (host_vars).
 
 
 Dependencies
