@@ -7,13 +7,13 @@ This ansible role configure glusterfs server
 Requirements
 ------------
 
-This ansible role will only run on identified OS defined on meta/main.yml
+This role is built to only run on platforms defined in `meta/main.yml`
 
 
 Role Variables
 --------------
 
-Read defaults/main.yml
+Necessary variables are defined on `defaults/main.yml`
 
 Use "gluster_node_peer_address" on each node as host_vars
 
@@ -21,8 +21,7 @@ Use "gluster_node_peer_address" on each node as host_vars
 Dependencies
 ------------
 
-
-
+none
 
 Example Playbook
 ----------------
@@ -38,4 +37,4 @@ BSD
 Author Information
 ------------------
 
-Dany GINHOUX
+https://github.com/dginhoux/
