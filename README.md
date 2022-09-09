@@ -1,4 +1,4 @@
-ginhouxnet.glusterfs
+Ansible Role : dginhoux.glusterfs
 =========
 
 This ansible role configure glusterfs server
