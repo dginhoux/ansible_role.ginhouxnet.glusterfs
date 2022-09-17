@@ -1,24 +1,24 @@
 ---
 # - name: Ensure dependencies are installed.
-#   yum:
+#   ansible.builtin.yum:
 #     name: "centos-release-gluster{{ gluster_version }}"
 #     state: present
 
 - name: install glusterfs
-  yum:
+  ansible.builtin.yum:
     name:
       - glusterfs-server
       - glusterfs-client
     state: present
 
 - name: start and enable glusterfs
-  service:
+  ansible.builtin.service:
     name: "{{ glusterfs_daemon }}"
     state: started
     enabled: true
 
 - name: configure brick
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: tasks/sub-tasks/glusterfs.yml
   with_items: "{{ gluster_bricks_list }}"
   loop_control:

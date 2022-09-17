@@ -1,7 +1,7 @@
 ---
 - block:
     # - name: "{{ brick.name }} create gluster brick directories"
-    #   file:
+    #   ansible.builtin.file:
     #     path: "{{ item }}"
     #     state: directory
     #     mode: 0775
@@ -34,7 +34,7 @@
       run_once: true
 
     # - name: "{{ brick.name }} create local mount point"
-    #   file:
+    #   ansible.builtin.file:
     #     path: "{{ brick.mount_local_path }}"
     #     state: directory
     #     mode: 0775
@@ -57,7 +57,7 @@
       when: not brick.mount_localy | bool
 
     # - name: "{{ brick.name }} delete local mount point"
-    #   file:
+    #   ansible.builtin.file:
     #     path: "{{ brick.mount_local_path }}"
     #     state: absent
     #   when: not brick.mount_localy | bool
@@ -70,7 +70,7 @@
         state: absent
 
     # - name: "{{ brick.name }} delete local mount point"
-    #   file:
+    #   ansible.builtin.file:
     #     path: "{{ brick.mount_local_path }}"
     #     state: absent
 
