@@ -1,9 +1,9 @@
 ---
 galaxy_info:
-  author: dginhoux
+  author: Dany GINHOUX
   description: install gluster and configure volumes
-  company: ginhouxnet
-  license: BSD
+  company: dginhoux
+  license: MIT
   min_ansible_version: 2.12
   platforms:
     - name: Debian
