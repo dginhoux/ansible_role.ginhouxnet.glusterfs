@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Dany GINHOUX
-  description: install gluster and configure volumes
+  description: dginhoux.glusterfs
   company: dginhoux
   license: MIT
   min_ansible_version: 2.12
@@ -27,4 +27,5 @@ galaxy_info:
         - 8
   galaxy_tags:
     - gluster
-  dependencies: []
+
+dependencies: []
