@@ -4,20 +4,20 @@
 #     name: "centos-release-gluster{{ gluster_version }}"
 #     state: present
 
-- name: install glusterfs
+- name: Install glusterfs
   ansible.builtin.yum:
     name:
       - glusterfs-server
       - glusterfs-client
     state: present
 
-- name: start and enable glusterfs
+- name: Start and enable glusterfs
   ansible.builtin.service:
     name: "{{ glusterfs_daemon }}"
     state: started
     enabled: true
 
-- name: configure brick
+- name: Configure brick
   ansible.builtin.include_tasks:
     file: tasks/sub-tasks/glusterfs.yml
   with_items: "{{ gluster_bricks_list }}"

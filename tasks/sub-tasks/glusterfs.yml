@@ -1,5 +1,8 @@
 ---
-- block:
+- name: Create volume {{ brick.name }}
+  when:
+    - brick.state == "present"
+  block:
     # - name: "{{ brick.name }} create gluster brick directories"
     #   ansible.builtin.file:
     #     path: "{{ item }}"
@@ -8,8 +11,8 @@
     #   with_items:
     #     - "{{ brick.path }}"
 
-    - name: "{{ brick.name }} ensure enough hosts for the cluster"
-      assert:
+    - name: Ensure enough hosts for the cluster {{ brick.name }}
+      ansible.builtin.assert:
         that:
           - brick.replicas == brick.nodes | length
         fail_msg: >-
@@ -17,8 +20,8 @@
           servers is required to configure a new cluster
         quiet: true
 
-    - name: "{{ brick.name }} create and configure distributed gluster volume"
-      gluster_volume:
+    - name: Create and configure distributed gluster volume {{ brick.name }}
+      gluster.gluster.gluster_volume:
         state: present
         name: "{{ brick.name }}"
         host: "{{ gluster_node_peer_address }}"
@@ -40,31 +43,33 @@
     #     mode: 0775
     #   when: brick.mount_localy | bool
 
-    - name: "{{ brick.name }} mount gluster volume localy"
+    - name: Mount gluster volume {{ brick.name }} localy
       mount:
         name: "{{ brick.mount_local_path }}"
         # src: "{{ internal_ip }}:/{{ brick.name }}"
-        src: "localhost:/{{ brick.name }}"
+        src: localhost:/{{ brick.name }}
         fstype: glusterfs
         opts: _netdev,x-systemd.automount,x-systemd.mount-timeout=10s,x-systemd.idle-timeout=10m
         state: mounted
       when: brick.mount_localy | bool
 
-    - name: "{{ brick.name }} umount gluster volume localy"
+    - name: Umount gluster volume {{ brick.name }} localy
       mount:
         name: "{{ brick.mount_local_path }}"
         state: absent
       when: not brick.mount_localy | bool
 
-    # - name: "{{ brick.name }} delete local mount point"
-    #   ansible.builtin.file:
-    #     path: "{{ brick.mount_local_path }}"
-    #     state: absent
-    #   when: not brick.mount_localy | bool
-  when: brick.state == "present"
+  # - name: "{{ brick.name }} delete local mount point"
+  #   ansible.builtin.file:
+  #     path: "{{ brick.mount_local_path }}"
+  #     state: absent
+  #   when: not brick.mount_localy | bool
 
-- block:
-    - name: "{{ brick.name }} umount gluster volume localy"
+- name: Remove volume {{ brick.name }}
+  when:
+    - brick.state == "absent"
+  block:
+    - name: Umount gluster volume {{ brick.name }} localy
       mount:
         name: "{{ brick.mount_local_path }}"
         state: absent
@@ -74,12 +79,11 @@
     #     path: "{{ brick.mount_local_path }}"
     #     state: absent
 
-    - name: "{{ brick.name }} remove distributed gluster volume"
-      gluster_volume:
+    - name: Remove distributed gluster volume {{ brick.name }}
+      gluster.gluster.gluster_volume:
         state: absent
         name: "{{ brick.name }}"
         brick: "{{ brick.path }}"
         cluster: "{{ brick.nodes }}"
         force: true
       run_once: true
-  when: brick.state == "absent"

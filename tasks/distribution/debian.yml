@@ -44,7 +44,7 @@
 #     state: present
 #     default_release: "{{ glusterfs_default_release }}"
 
-- name: install dependencies
+- name: Install dependencies
   ansible.builtin.apt:
     name:
       - gnupg2
@@ -54,26 +54,26 @@
     update_cache: true
     state: present
 
-- name: add ppa repo
-  apt_repository:
+- name: Add ppa repo
+  ansible.builtin.apt_repository:
     repo: ppa:gluster/glusterfs-{{ gluster_version }}
     filename: glusterfs
     state: present
 
-- name: install glusterfs
+- name: Install glusterfs
   ansible.builtin.apt:
     name:
       - glusterfs-client
       - glusterfs-server
     state: present
 
-- name: start and enable glusterfs
+- name: Start and enable glusterfs
   ansible.builtin.service:
     name: "{{ glusterfs_daemon }}"
     state: started
     enabled: true
 
-- name: configure brick
+- name: Configure brick
   ansible.builtin.include_tasks:
     file: tasks/sub-tasks/glusterfs.yml
   with_items: "{{ gluster_bricks_list }}"
