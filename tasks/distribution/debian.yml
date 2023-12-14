@@ -45,6 +45,7 @@
 #     default_release: "{{ glusterfs_default_release }}"
 
 - name: Install dependencies
+  become: true
   ansible.builtin.apt:
     name:
       - gnupg2
@@ -55,12 +56,14 @@
     state: present
 
 - name: Add ppa repo
+  become: true
   ansible.builtin.apt_repository:
     repo: ppa:gluster/glusterfs-{{ gluster_version }}
     filename: glusterfs
     state: present
 
 - name: Install glusterfs
+  become: true
   ansible.builtin.apt:
     name:
       - glusterfs-client
@@ -68,6 +71,7 @@
     state: present
 
 - name: Start and enable glusterfs
+  become: true
   ansible.builtin.service:
     name: "{{ glusterfs_daemon }}"
     state: started

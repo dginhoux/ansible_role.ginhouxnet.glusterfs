@@ -21,6 +21,7 @@
         quiet: true
 
     - name: Create and configure distributed gluster volume {{ brick.name }}
+      become: true
       gluster.gluster.gluster_volume:
         state: present
         name: "{{ brick.name }}"
@@ -44,7 +45,8 @@
     #   when: brick.mount_localy | bool
 
     - name: Mount gluster volume {{ brick.name }} localy
-      mount:
+      become: true
+      ansible.posix.mount:
         name: "{{ brick.mount_local_path }}"
         # src: "{{ internal_ip }}:/{{ brick.name }}"
         src: localhost:/{{ brick.name }}
@@ -54,7 +56,8 @@
       when: brick.mount_localy | bool
 
     - name: Umount gluster volume {{ brick.name }} localy
-      mount:
+      become: true
+      ansible.posix.mount:
         name: "{{ brick.mount_local_path }}"
         state: absent
       when: not brick.mount_localy | bool
@@ -70,7 +73,8 @@
     - brick.state == "absent"
   block:
     - name: Umount gluster volume {{ brick.name }} localy
-      mount:
+      become: true
+      ansible.posix.mount:
         name: "{{ brick.mount_local_path }}"
         state: absent
 
@@ -80,6 +84,7 @@
     #     state: absent
 
     - name: Remove distributed gluster volume {{ brick.name }}
+      become: true
       gluster.gluster.gluster_volume:
         state: absent
         name: "{{ brick.name }}"
