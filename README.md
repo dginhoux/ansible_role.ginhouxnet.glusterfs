@@ -49,9 +49,10 @@ git clone https://github.com/dginhoux/ansible_role.glusterfs dginhoux.glusterfs
 #### EXAMPLE PLAYBOOK
 
 ```yaml
-- hosts: all
-  roles:
-    - name: start role dginhoux.glusterfs
+- name: Playbook
+  hosts: all
+  tasks:
+    - name: Start role dginhoux.glusterfs
       ansible.builtin.include_role:
         name: dginhoux.glusterfs
 ```
@@ -61,7 +62,9 @@ git clone https://github.com/dginhoux/ansible_role.glusterfs dginhoux.glusterfs
 
 #### DEFAULT VARIABLES
 
-Defaults variables defined in `defaults/main.yml` : 
+Defaults variables defined in `defaults/main.yml`
+
+#### EXAMPLES VARIABLES
 
 ```yaml
 # For Ubuntu.
